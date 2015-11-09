@@ -25,7 +25,7 @@ const config = {
   },
   isProduction: isProduction,
   googleAnalyticsId: 'UA-XXXXXXX-X',
-  port: process.env.PORT || 8000,
+  port: process.env.PORT || 8001,
   webpackStylesExtensions: ['css', 'less', 'sass', 'scss', 'styl']
 };
 

@@ -4,7 +4,7 @@ export default {
       madeByHtml: 'made by <a href="https://twitter.com/steida">steida</a>'
     },
     links: {
-      home: 'Home',
+      home: 'Home - hhj - hhj - hhj',
       login: 'Login',
       me: 'Me (protected)',
       todos: 'Todos'
