@@ -1,5 +1,6 @@
 /* eslint-disable no-undef, no-console */
 import bg from 'gulp-bg';
+import del from 'del';
 import eslint from 'gulp-eslint';
 import fs from 'fs';
 import gulp from 'gulp';
@@ -29,6 +30,8 @@ gulp.task('env', () => {
   process.env.NODE_ENV = args.production ? 'production' : 'development';
 });
 
+gulp.task('clean', done => del('build/*', done));
+
 gulp.task('build-webpack', ['env'], webpackBuild);
 gulp.task('build', ['build-webpack']);
 
@@ -43,6 +46,12 @@ gulp.task('eslint-ci', () => {
 
 gulp.task('mocha', () => {
   mochaRunCreator('process')();
+});
+
+// Enable to run single test file
+// ex. gulp mocha-file --file src/browser/components/__test__/Button.js
+gulp.task('mocha-file', () => {
+  mochaRunCreator('process')({path: path.join(__dirname, args['file'])});
 });
 
 // Continuous test running
@@ -67,7 +76,7 @@ gulp.task('server-nodemon', shell.task(
 
 gulp.task('server', ['env'], done => {
   if (args.production)
-    runSequence('build', 'server-node', done);
+    runSequence('clean', 'build', 'server-node', done);
   else
     runSequence('server-hot', 'server-nodemon', done);
 });
