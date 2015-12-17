@@ -3,7 +3,7 @@ import createLogger from 'redux-logger';
 import fetch from './fetch';
 import injectDependencies from './lib/injectDependencies';
 import promiseMiddleware from 'redux-promise-middleware';
-import stateToJS from './lib/stateToJS';
+import shortid from 'shortid';
 import validate from './validate';
 import {applyMiddleware, compose, createStore} from 'redux';
 
@@ -18,8 +18,10 @@ const BROWSER_DEVELOPMENT = (
 export default function configureStore({deps, engine, initialState}) {
 
   // Inject services for actions.
+  const getUid = () => shortid.generate();
+  const now = () => Date.now();
   const dependenciesMiddleware = injectDependencies(
-    {...deps, fetch},
+    {...deps, fetch, getUid, now},
     {validate}
   );
 
@@ -43,7 +45,8 @@ export default function configureStore({deps, engine, initialState}) {
   if (BROWSER_DEVELOPMENT) {
     const logger = createLogger({
       collapsed: true,
-      transformer: stateToJS
+      // Convert immutablejs to JSON.
+      stateTransformer: state => JSON.parse(JSON.stringify(state))
     });
     // Logger must be the last middleware in chain.
     middleware = [...middleware, logger];
